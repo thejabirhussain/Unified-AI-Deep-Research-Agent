@@ -338,4 +338,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Support
 - Documentation: `/docs`
 - API Reference: `/api-docs`
-- Email: support@platform.com
+- Email: thejabirhussain@gmail.com
