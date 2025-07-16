@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Choose Your Plan</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        .plan-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+        .plan-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+        }
+        .payment-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        #card-element {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        #card-errors {
+            color: #dc3545;
+            margin-bottom: 1rem;
+        }
+        .submit-button {
+            background: #007bff;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .submit-button:disabled {
+            background: #ccc;
+        }
+        .welcome-section {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            margin-bottom: 2rem;
+        }
+        .welcome-section h1 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        .welcome-section p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-section">
+        <h1>Upgrade Your Experience</h1>
+        <p>Choose the plan that best fits your needs</p>
+    </div>
+
+    <div class="plan-container">
+        <div class="plan-card">
+            <h2>Basic Plan</h2>
+            <p>$9.99/month</p>
+            <ul>
+                <li>Access to GPT-4</li>
+                <li>Basic Support</li>
+                <li>100 Credits/month</li>
+            </ul>
+            <button onclick="showPaymentForm('basic')">Select Basic</button>
+        </div>
+        <div class="plan-card">
+            <h2>Pro Plan</h2>
+            <p>$29.99/month</p>
+            <ul>
+                <li>Access to All Models</li>
+                <li>Priority Support</li>
+                <li>500 Credits/month</li>
+            </ul>
+            <button onclick="showPaymentForm('pro')">Select Pro</button>
+        </div>
+    </div>
+
+    <div class="payment-form" id="payment-form-container" style="display: none;">
+        <form id="payment-form">
+            <div id="card-element"></div>
+            <div id="card-errors" role="alert"></div>
+            <button type="submit" class="submit-button">
+                <span id="button-text">Subscribe Now</span>
+                <div id="spinner" style="display: none;">Processing...</div>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        let selectedPlan = null;
+        const stripe = Stripe('<%= stripePublicKey %>');
+        const elements = stripe.elements();
+        const card = elements.create('card');
+        card.mount('#card-element');
+
+        function showPaymentForm(plan) {
+            selectedPlan = plan;
+            document.getElementById('payment-form-container').style.display = 'block';
+        }
+
+        document.getElementById('payment-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const button = e.target.querySelector('button');
+            button.disabled = true;
+            document.getElementById('spinner').style.display = 'inline';
+            document.getElementById('button-text').style.display = 'none';
+
+            try {
+                await handleSubscription(selectedPlan);
+            } catch (error) {
+                button.disabled = false;
+                document.getElementById('spinner').style.display = 'none';
+                document.getElementById('button-text').style.display = 'inline';
+            }
+        });
+    </script>
+</body>
+</html>
