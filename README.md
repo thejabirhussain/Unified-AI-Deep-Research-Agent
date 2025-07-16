@@ -329,6 +329,9 @@ docker run -p 3000:3000 ai-chat-platform
 - CSRF tokens
 - API key encryption
 
+## About the Developer
+This project was developed by Jabir Hussain, a passionate software engineer specializing in building scalable web applications and integrating advanced AI technologies. For inquiries or collaboration, contact me at thejabirhussain@gmail.com.
+
 ## Contributing
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
